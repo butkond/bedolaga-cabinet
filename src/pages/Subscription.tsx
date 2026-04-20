@@ -889,31 +889,39 @@ export default function Subscription() {
 
               {/* ─── Subscription URL ─── */}
               {subscription.subscription_url && !subscription.hide_subscription_link && (
-                <div className="mb-5 flex gap-2">
-                  <code
-                    className="scrollbar-hide flex-1 overflow-x-auto break-all rounded-[10px] px-3 py-2 font-mono text-[11px] text-dark-50/30"
-                    style={{
-                      background: g.codeBg,
-                      border: `1px solid ${g.codeBorder}`,
-                    }}
-                  >
-                    {subscription.subscription_url}
-                  </code>
-                  <button
-                    onClick={copyUrl}
-                    className="flex h-auto items-center rounded-[10px] px-3 transition-colors duration-300"
-                    style={{
-                      background: copied ? 'rgba(var(--color-accent-400), 0.12)' : g.innerBorder,
-                      border: copied
-                        ? '1px solid rgba(var(--color-accent-400), 0.2)'
-                        : `1px solid ${g.trackBg}`,
-                      color: copied ? 'rgb(var(--color-accent-400))' : g.textMuted,
-                    }}
-                    title={t('subscription.copyLink')}
-                  >
-                    {copied ? <CheckIcon /> : <CopyIcon />}
-                  </button>
-                </div>
+                <>
+                  <div className="mb-2 text-sm" style={{ color: g.textSecondary }}>
+                    {t(
+                      'dashboard.copyLinkInstruction',
+                      'Скопируйте ссылку, вставьте в браузер и следуйте инструкции:',
+                    )}
+                  </div>
+                  <div className="mb-5 flex gap-2">
+                    <code
+                      className="scrollbar-hide flex-1 overflow-x-auto break-all rounded-[10px] px-3 py-2 font-mono text-[11px] text-dark-50/30"
+                      style={{
+                        background: g.codeBg,
+                        border: `1px solid ${g.codeBorder}`,
+                      }}
+                    >
+                      {subscription.subscription_url}
+                    </code>
+                    <button
+                      onClick={copyUrl}
+                      className="flex h-auto items-center rounded-[10px] px-3 transition-colors duration-300"
+                      style={{
+                        background: copied ? 'rgba(var(--color-accent-400), 0.12)' : g.innerBorder,
+                        border: copied
+                          ? '1px solid rgba(var(--color-accent-400), 0.2)'
+                          : `1px solid ${g.trackBg}`,
+                        color: copied ? 'rgb(var(--color-accent-400))' : g.textMuted,
+                      }}
+                      title={t('subscription.copyLink')}
+                    >
+                      {copied ? <CheckIcon /> : <CopyIcon />}
+                    </button>
+                  </div>
+                </>
               )}
 
               {/* ─── Countdown ─── */}
