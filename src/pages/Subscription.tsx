@@ -15,7 +15,7 @@ import { useTheme } from '../hooks/useTheme';
 import InsufficientBalancePrompt from '../components/InsufficientBalancePrompt';
 import { useCurrency } from '../hooks/useCurrency';
 import { useCloseOnSuccessNotification } from '../store/successNotification';
-import PurchaseCTAButton from '../components/subscription/PurchaseCTAButton';
+// import PurchaseCTAButton from '../components/subscription/PurchaseCTAButton'; // HIDDEN by customization
 import { CopyIcon, CheckIcon } from '../components/icons';
 import { useHaptic } from '../platform';
 import {
@@ -788,8 +788,9 @@ export default function Subscription() {
                 />
               </div>
 
-              {/* ─── Connect Device Button ─── */}
-              {subscription.subscription_url && (
+              {/* ─── Connect Device Button (HIDDEN by customization - wrapped in false &&) ─── */}
+              {/* eslint-disable-next-line no-constant-binary-expression */}
+              {false && subscription!.subscription_url && (
                 <HoverBorderGradient
                   as="button"
                   accentColor={zone.mainHex}
@@ -829,11 +830,11 @@ export default function Subscription() {
                       {t('dashboard.connectDevice')}
                     </div>
                     <div className="mt-0.5 text-[11px] text-dark-50/30">
-                      {subscription.device_limit === 0
+                      {subscription!.device_limit === 0
                         ? t('dashboard.devicesConnectedUnlimited', { used: connectedDevices })
                         : t('dashboard.devicesOfMax', {
                             used: connectedDevices,
-                            max: subscription.device_limit,
+                            max: subscription!.device_limit,
                           })}
                     </div>
                     {isAtDeviceLimit && (
@@ -845,16 +846,16 @@ export default function Subscription() {
                       </div>
                     )}
                   </div>
-                  {subscription.device_limit === 0 ? (
+                  {subscription!.device_limit === 0 ? (
                     <div
                       className="flex flex-shrink-0 items-center text-lg text-dark-50/40"
                       aria-hidden="true"
                     >
                       ∞
                     </div>
-                  ) : subscription.device_limit <= 10 ? (
+                  ) : subscription!.device_limit <= 10 ? (
                     <div className="flex flex-shrink-0 gap-1.5" aria-hidden="true">
-                      {Array.from({ length: subscription.device_limit }, (_, i) => (
+                      {Array.from({ length: subscription!.device_limit }, (_, i) => (
                         <div
                           key={i}
                           className="h-[7px] w-[7px] rounded-full transition-[background-color,box-shadow] duration-300"
@@ -874,7 +875,7 @@ export default function Subscription() {
                         <div
                           className="h-full rounded-full transition-[width] duration-500"
                           style={{
-                            width: `${Math.round((connectedDevices / subscription.device_limit) * 100)}%`,
+                            width: `${Math.round((connectedDevices / subscription!.device_limit) * 100)}%`,
                             background: zone.mainHex,
                             boxShadow: `0 0 8px ${zone.mainHex}40`,
                             minWidth: connectedDevices > 0 ? '4px' : '0px',
@@ -1272,8 +1273,8 @@ export default function Subscription() {
         </div>
       )}
 
-      {/* Purchase / Renewal CTA */}
-      <PurchaseCTAButton subscription={subscription} isMultiTariff={isMultiTariff} />
+      {/* Purchase / Renewal CTA (HIDDEN by customization) */}
+      {/* <PurchaseCTAButton subscription={subscription} isMultiTariff={isMultiTariff} /> */}
 
       {/* Delete expired subscription */}
       {isMultiTariff && subscription && !subscription.is_active && !subscription.is_trial && (

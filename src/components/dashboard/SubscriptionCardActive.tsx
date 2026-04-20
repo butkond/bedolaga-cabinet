@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
@@ -9,6 +10,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { useTrafficZone } from '../../hooks/useTrafficZone';
 import { formatTraffic } from '../../utils/formatTraffic';
 import { getGlassColors } from '../../utils/glassTheme';
+import { copyToClipboard } from '../../utils/clipboard';
 import { HoverBorderGradient } from '../ui/hover-border-gradient';
 import { useHaptic } from '../../platform';
 import type { Subscription } from '../../types';
@@ -60,6 +62,19 @@ export default function SubscriptionCardActive({
   const zone = useTrafficZone(usedPercent);
   const animatedPercent = useAnimatedNumber(usedPercent);
   const haptic = useHaptic();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyUrl = async () => {
+    if (!subscription.subscription_url) return;
+    try {
+      await copyToClipboard(subscription.subscription_url);
+      setCopied(true);
+      haptic.impact('light');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      haptic.notification('error');
+    }
+  };
 
   const isAtDeviceLimit =
     subscription.device_limit > 0 && connectedDevices >= subscription.device_limit;
@@ -203,8 +218,99 @@ export default function SubscriptionCardActive({
         />
       </div>
 
-      {/* ─── Connect Device Button ─── */}
+      {/* ─── Connection URL + Copy (replaces Connect Device button) ─── */}
       {subscription.subscription_url && (
+        <HoverBorderGradient accentColor={zone.mainHex} className="mb-2.5 w-full rounded-[14px]">
+          <div
+            className="flex w-full items-center gap-2.5 rounded-[14px] p-2.5"
+            data-onboarding="connect-devices"
+          >
+            {/* Link icon */}
+            <div
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] transition-colors duration-500"
+              style={{ background: `rgba(${zone.mainVarRaw}, 0.07)` }}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={zone.mainVar}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+            </div>
+
+            {/* URL display */}
+            <code
+              className="block min-w-0 flex-1 truncate whitespace-nowrap rounded-[10px] px-3 py-2 font-mono text-[11px] text-dark-50/50"
+              style={{
+                background: g.codeBg,
+                border: `1px solid ${g.codeBorder}`,
+              }}
+              title={subscription.subscription_url}
+            >
+              {subscription.subscription_url}
+            </code>
+
+            {/* Copy button */}
+            <button
+              type="button"
+              onClick={handleCopyUrl}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] transition-colors duration-300"
+              style={{
+                background: copied ? `rgba(${zone.mainVarRaw}, 0.15)` : g.innerBorder,
+                border: copied
+                  ? `1px solid rgba(${zone.mainVarRaw}, 0.25)`
+                  : `1px solid ${g.trackBg}`,
+                color: copied ? zone.mainVar : g.textMuted,
+              }}
+              aria-label={t('subscription.copyLink')}
+              title={t('subscription.copyLink')}
+            >
+              {copied ? (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              ) : (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </HoverBorderGradient>
+      )}
+
+      {/* ─── Connect Device Button (HIDDEN by customization) ─── */}
+      {/* eslint-disable-next-line no-constant-binary-expression */}
+      {false && subscription.subscription_url && (
         <HoverBorderGradient
           as="button"
           accentColor={zone.mainHex}
