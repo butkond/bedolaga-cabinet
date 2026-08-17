@@ -780,18 +780,31 @@
     "shareButton": "Поделиться",
     "shareMessage": "Заходи в {{botName}} по моей ссылке и получай до {{percent}}% кешбэка!",
     "shareHint": "Поделитесь ссылкой с друзьями. Когда они зарегистрируются и оплатят, вы получите {{percent}}% комиссии!",
+    "shareHintTraffic": "Поделитесь ссылкой: награда начисляется после первого подключения приглашённого пользователя к VPN.",
+    "freeDaysShort": "+{{count}} дн.",
+    "rewardMode": {
+      "title": "Система вознаграждения",
+      "balance": "Бонусы за пополнения",
+      "balanceDesc": "Комиссия и бонусы за пополнения рефералов",
+      "traffic": "Бесплатные дни",
+      "trafficDesc": "Награда за рефералов, впервые подключившихся к VPN"
+    },
     "stats": {
       "totalReferrals": "Всего рефералов",
       "activeReferrals": "Активных",
       "totalEarnings": "Общий заработок",
-      "commissionRate": "Комиссия"
+      "commissionRate": "Комиссия",
+      "freeDaysEarned": "Бесплатных дней",
+      "qualifiedReferrals": "{{count}} подключились"
     },
     "terms": {
       "title": "Условия программы",
       "commission": "Комиссия",
       "minTopup": "Мин. пополнение",
       "newUserBonus": "Бонус новому пользователю",
-      "inviterBonus": "Бонус пригласившему"
+      "inviterBonus": "Бонус пригласившему",
+      "trafficReward": "За подключения",
+      "trafficRewardValue": "{{count}} → +{{days}} дн."
     },
     "yourReferrals": "Ваши рефералы",
     "noReferrals": "Пока нет рефералов. Поделитесь ссылкой, чтобы пригласить друзей!",
@@ -802,7 +815,8 @@
     "hasPaid": "Оплатил",
     "status": {
       "pending": "Ожидание",
-      "paid": "Оплачено"
+      "paid": "Оплачено",
+      "connected": "Подключился"
     },
     "earningsHistory": "История начислений",
     "reason": "Причина",
@@ -3075,6 +3089,7 @@
       "pendingApplications": "Заявок на рассмотрении",
       "totalReferrals": "Всего рефералов",
       "totalEarnings": "Всего заработано",
+      "totalTrafficRewardDays": "Бесплатных дней",
       "tabs": {
         "partners": "Партнёры",
         "applications": "Заявки"
@@ -3083,6 +3098,7 @@
       "noApplications": "Нет заявок на рассмотрении",
       "commission": "{{percent}}% комиссия",
       "referrals": "{{count}} рефералов",
+      "trafficRewardDays": "🎁 {{count}} дн.",
       "actions": {
         "approve": "Одобрить",
         "reject": "Отклонить",
@@ -3128,7 +3144,10 @@
         "cooldownDaysDesc": "Сколько дней должно пройти между запросами на вывод",
         "requisitesText": "Текст для поля реквизитов",
         "requisitesTextDesc": "Кастомная подсказка пользователю, какие реквизиты указать при выводе",
-        "requisitesTextPlaceholder": "Например: Укажите номер карты Сбербанк / Тинькофф или USDT TRC-20 адрес"
+        "requisitesTextPlaceholder": "Например: Укажите номер карты Сбербанк / Тинькофф или USDT TRC-20 адрес",
+        "rewardModes": "Доступные системы",
+        "rewardModesReadOnly": "Список доступных систем фиксируется через .env.",
+        "trafficRewardReadOnly": "Traffic reward: {{count}} реф. → {{days}} дн. Настраивается через .env."
       }
     },
     "partnerDetail": {
@@ -3152,6 +3171,13 @@
         "today": "Сегодня",
         "week": "За неделю",
         "month": "За месяц"
+      },
+      "trafficRewards": {
+        "title": "Награды за подключения",
+        "qualified": "Квалифицировано",
+        "rewarded": "Учтено в наградах",
+        "pending": "Ожидают порога",
+        "days": "Выдано дней"
       },
       "commission": {
         "title": "Комиссия",

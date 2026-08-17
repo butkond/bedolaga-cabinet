@@ -92,6 +92,14 @@ export default function AdminPartners() {
             </div>
             <div className="text-sm text-dark-400">{t('admin.partners.totalEarnings')}</div>
           </div>
+          <div className="rounded-xl border border-dark-700 bg-dark-800 p-4">
+            <div className="text-2xl font-bold text-accent-400">
+              {stats.total_traffic_reward_days}
+            </div>
+            <div className="text-sm text-dark-400">
+              {t('admin.partners.totalTrafficRewardDays', 'Бесплатных дней')}
+            </div>
+          </div>
         </div>
       )}
 
@@ -164,6 +172,12 @@ export default function AdminPartners() {
                         </span>
                         <span className="text-success-400">
                           {formatWithCurrency(partner.total_earnings_kopeks / 100)}
+                        </span>
+                        <span className="text-accent-400">
+                          {t('admin.partners.trafficRewardDays', {
+                            count: partner.traffic_reward_days_earned,
+                            defaultValue: `🎁 ${partner.traffic_reward_days_earned} дн.`,
+                          })}
                         </span>
                       </div>
                     </div>

@@ -178,6 +178,47 @@ export default function AdminPartnerDetail() {
           </div>
         </div>
 
+        {/* Traffic rewards */}
+        <div className="rounded-xl border border-dark-700 bg-dark-800 p-4">
+          <h3 className="mb-4 font-medium text-dark-200">
+            {t('admin.partnerDetail.trafficRewards.title', 'Награды за подключения')}
+          </h3>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="rounded-lg bg-dark-700/50 p-3">
+              <div className="mb-1 text-sm text-dark-400">
+                {t('admin.partnerDetail.trafficRewards.qualified', 'Квалифицировано')}
+              </div>
+              <div className="text-lg font-medium text-dark-200">
+                {partner.traffic_qualified_referrals}
+              </div>
+            </div>
+            <div className="rounded-lg bg-dark-700/50 p-3">
+              <div className="mb-1 text-sm text-dark-400">
+                {t('admin.partnerDetail.trafficRewards.rewarded', 'Учтено в наградах')}
+              </div>
+              <div className="text-lg font-medium text-dark-200">
+                {partner.traffic_rewarded_referrals}
+              </div>
+            </div>
+            <div className="rounded-lg bg-dark-700/50 p-3">
+              <div className="mb-1 text-sm text-dark-400">
+                {t('admin.partnerDetail.trafficRewards.pending', 'Ожидают порога')}
+              </div>
+              <div className="text-lg font-medium text-dark-200">
+                {partner.traffic_unrewarded_referrals}
+              </div>
+            </div>
+            <div className="rounded-lg bg-dark-700/50 p-3">
+              <div className="mb-1 text-sm text-dark-400">
+                {t('admin.partnerDetail.trafficRewards.days', 'Выдано дней')}
+              </div>
+              <div className="text-lg font-medium text-accent-400">
+                {partner.traffic_reward_days_earned}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Commission */}
         <div className="rounded-xl border border-dark-700 bg-dark-800 p-4">
           <div className="flex items-center justify-between">

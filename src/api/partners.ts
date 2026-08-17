@@ -134,6 +134,7 @@ export interface AdminPartnerItem {
   commission_percent: number | null;
   total_referrals: number;
   total_earnings_kopeks: number;
+  traffic_reward_days_earned: number;
   balance_kopeks: number;
   partner_status: string;
   created_at: string;
@@ -159,6 +160,11 @@ export interface AdminPartnerDetailResponse {
   earnings_today: number;
   earnings_week: number;
   earnings_month: number;
+  traffic_qualified_referrals: number;
+  traffic_rewarded_referrals: number;
+  traffic_unrewarded_referrals: number;
+  traffic_reward_days_earned: number;
+  traffic_reward_grants_count: number;
   conversion_to_paid: number;
   campaigns: {
     id: number;
@@ -177,6 +183,7 @@ export interface PartnerStats {
   pending_applications: number;
   total_referrals: number;
   total_earnings_kopeks: number;
+  total_traffic_reward_days: number;
 }
 
 // ==================== Partner Settings types ====================
@@ -188,6 +195,13 @@ export interface PartnerSettings {
   withdrawal_requisites_text: string;
   partner_section_visible: boolean;
   referral_program_enabled: boolean;
+  available_reward_modes: string[];
+  default_reward_mode: string;
+  reward_mode_selectable: boolean;
+  traffic_rewards_enabled: boolean;
+  traffic_reward_required_referrals: number;
+  traffic_reward_days: number;
+  traffic_reward_qualification_window_days: number;
 }
 
 export interface PartnerSettingsUpdate {

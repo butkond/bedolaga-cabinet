@@ -119,6 +119,11 @@ export default function Referral() {
     queryFn: referralApi.getReferralTerms,
   });
 
+  const availableRewardModes = terms?.available_reward_modes ?? info?.available_reward_modes ?? [];
+  const showBalanceRewards =
+    availableRewardModes.length === 0 || availableRewardModes.includes('balance_commission');
+  const showTrafficRewards = availableRewardModes.includes('traffic_reward');
+
   const { data: referralList } = useQuery({
     queryKey: ['referral-list'],
     queryFn: () => referralApi.getReferralList({ per_page: 10 }),
@@ -165,11 +170,27 @@ export default function Referral() {
     },
   });
 
+  const updateRewardModeMutation = useMutation({
+    mutationFn: referralApi.updateRewardMode,
+    onSuccess: (updatedInfo) => {
+      queryClient.setQueryData(['referral-info'], updatedInfo);
+      queryClient.invalidateQueries({ queryKey: ['referral-list'] });
+    },
+  });
+
   const programTerms = useMemo(() => {
     if (!terms) return null;
-    const showNewUserBonus = terms.first_topup_bonus_kopeks > 0;
-    const showInviterBonus = terms.inviter_bonus_kopeks > 0;
-    const cardCount = 2 + (showNewUserBonus ? 1 : 0) + (showInviterBonus ? 1 : 0);
+    const showNewUserBonus = showBalanceRewards && terms.first_topup_bonus_kopeks > 0;
+    const showInviterBonus = showBalanceRewards && terms.inviter_bonus_kopeks > 0;
+    const showCommission = showBalanceRewards;
+    const showMinTopup = showBalanceRewards;
+    const showTrafficTerms = showTrafficRewards;
+    const cardCount =
+      (showCommission ? 1 : 0) +
+      (showMinTopup ? 1 : 0) +
+      (showNewUserBonus ? 1 : 0) +
+      (showInviterBonus ? 1 : 0) +
+      (showTrafficTerms ? 1 : 0);
     const gridColsMap: Record<number, string> = {
       2: 'md:grid-cols-2',
       3: 'md:grid-cols-3',
@@ -181,18 +202,22 @@ export default function Referral() {
       <div className="bento-card">
         <h2 className="mb-4 text-lg font-semibold text-dark-100">{t('referral.terms.title')}</h2>
         <div className={`grid grid-cols-2 gap-4 ${gridCols}`}>
-          <div className="rounded-xl bg-dark-800/30 p-3">
-            <div className="text-sm text-dark-500">{t('referral.terms.commission')}</div>
-            <div className="mt-1 text-lg font-semibold text-dark-100">
-              {terms.commission_percent}%
+          {showCommission && (
+            <div className="rounded-xl bg-dark-800/30 p-3">
+              <div className="text-sm text-dark-500">{t('referral.terms.commission')}</div>
+              <div className="mt-1 text-lg font-semibold text-dark-100">
+                {terms.commission_percent}%
+              </div>
             </div>
-          </div>
-          <div className="rounded-xl bg-dark-800/30 p-3">
-            <div className="text-sm text-dark-500">{t('referral.terms.minTopup')}</div>
-            <div className="mt-1 text-lg font-semibold text-dark-100">
-              {formatAmount(terms.minimum_topup_rubles)} {currencySymbol}
+          )}
+          {showMinTopup && (
+            <div className="rounded-xl bg-dark-800/30 p-3">
+              <div className="text-sm text-dark-500">{t('referral.terms.minTopup')}</div>
+              <div className="mt-1 text-lg font-semibold text-dark-100">
+                {formatAmount(terms.minimum_topup_rubles)} {currencySymbol}
+              </div>
             </div>
-          </div>
+          )}
           {showNewUserBonus && (
             <div className="rounded-xl bg-dark-800/30 p-3">
               <div className="text-sm text-dark-500">{t('referral.terms.newUserBonus')}</div>
@@ -209,10 +234,32 @@ export default function Referral() {
               </div>
             </div>
           )}
+          {showTrafficTerms && (
+            <div className="rounded-xl bg-dark-800/30 p-3">
+              <div className="text-sm text-dark-500">
+                {t('referral.terms.trafficReward', 'За подключения')}
+              </div>
+              <div className="mt-1 text-lg font-semibold text-accent-400">
+                {t('referral.terms.trafficRewardValue', {
+                  count: terms.traffic_reward_required_referrals ?? 1,
+                  days: terms.traffic_reward_days ?? 0,
+                  defaultValue: `${terms.traffic_reward_required_referrals ?? 1} → +${terms.traffic_reward_days ?? 0} дн.`,
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
-  }, [terms, t, formatAmount, formatPositive, currencySymbol]);
+  }, [
+    terms,
+    t,
+    formatAmount,
+    formatPositive,
+    currencySymbol,
+    showBalanceRewards,
+    showTrafficRewards,
+  ]);
 
   const copyLink = async (link: string, type: 'cabinet' | 'bot') => {
     if (!link) return;
@@ -290,13 +337,56 @@ export default function Referral() {
   const showPendingSection = partnerStatusValue === 'pending';
   const showApprovedSection = partnerStatusValue === 'approved';
   const showRejectedSection = partnerStatusValue === 'rejected';
+  const activeRewardMode =
+    info?.referral_reward_mode || terms?.default_reward_mode || 'balance_commission';
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-dark-50 sm:text-3xl">{t('referral.title')}</h1>
 
+      {terms?.reward_mode_selectable && availableRewardModes.length > 1 && (
+        <div className="bento-card">
+          <h2 className="mb-3 text-lg font-semibold text-dark-100">
+            {t('referral.rewardMode.title', 'Система вознаграждения')}
+          </h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {availableRewardModes.map((mode) => (
+              <button
+                key={mode}
+                onClick={() => updateRewardModeMutation.mutate(mode)}
+                disabled={updateRewardModeMutation.isPending || mode === activeRewardMode}
+                className={`rounded-xl border p-3 text-left transition-colors ${
+                  mode === activeRewardMode
+                    ? 'border-accent-500/60 bg-accent-500/10 text-dark-100'
+                    : 'border-dark-700 bg-dark-800/40 text-dark-300 hover:border-dark-600'
+                }`}
+              >
+                <div className="font-medium">
+                  {mode === 'traffic_reward'
+                    ? t('referral.rewardMode.traffic', 'Бесплатные дни')
+                    : t('referral.rewardMode.balance', 'Бонусы за пополнения')}
+                </div>
+                <div className="mt-1 text-xs text-dark-500">
+                  {mode === 'traffic_reward'
+                    ? t(
+                        'referral.rewardMode.trafficDesc',
+                        'Награда за рефералов, впервые подключившихся к VPN',
+                      )
+                    : t(
+                        'referral.rewardMode.balanceDesc',
+                        'Комиссия и бонусы за пополнения рефералов',
+                      )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+      <div
+        className={`grid grid-cols-2 gap-3 md:gap-4 ${showTrafficRewards ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}
+      >
         <div className="bento-card-hover col-span-2 md:col-span-1">
           <div className="text-sm text-dark-400">{t('referral.stats.totalReferrals')}</div>
           <div className="stat-value mt-1">{info?.total_referrals || 0}</div>
@@ -304,16 +394,36 @@ export default function Referral() {
             {info?.active_referrals || 0} {t('referral.stats.activeReferrals').toLowerCase()}
           </div>
         </div>
-        <div className="bento-card-hover">
-          <div className="text-sm text-dark-400">{t('referral.stats.totalEarnings')}</div>
-          <div className="stat-value mt-1 text-success-400">
-            {formatPositive(info?.total_earnings_rubles || 0)}
+        {showBalanceRewards && (
+          <div className="bento-card-hover">
+            <div className="text-sm text-dark-400">{t('referral.stats.totalEarnings')}</div>
+            <div className="stat-value mt-1 text-success-400">
+              {formatPositive(info?.total_earnings_rubles || 0)}
+            </div>
           </div>
-        </div>
-        <div className="bento-card-hover">
-          <div className="text-sm text-dark-400">{t('referral.stats.commissionRate')}</div>
-          <div className="stat-value mt-1 text-accent-400">{info?.commission_percent || 0}%</div>
-        </div>
+        )}
+        {showBalanceRewards && (
+          <div className="bento-card-hover">
+            <div className="text-sm text-dark-400">{t('referral.stats.commissionRate')}</div>
+            <div className="stat-value mt-1 text-accent-400">{info?.commission_percent || 0}%</div>
+          </div>
+        )}
+        {showTrafficRewards && (
+          <div className="bento-card-hover">
+            <div className="text-sm text-dark-400">
+              {t('referral.stats.freeDaysEarned', 'Бесплатных дней')}
+            </div>
+            <div className="stat-value mt-1 text-accent-400">
+              {info?.traffic_reward_days_earned || 0}
+            </div>
+            <div className="mt-1 text-sm text-dark-500">
+              {t('referral.stats.qualifiedReferrals', {
+                count: info?.traffic_qualified_referrals || 0,
+                defaultValue: `${info?.traffic_qualified_referrals || 0} подключились`,
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Referral Links */}
@@ -397,9 +507,18 @@ export default function Referral() {
             </div>
           </div>
         </div>
-        <p className="mt-3 text-sm text-dark-500">
-          {t('referral.shareHint', { percent: info?.commission_percent || 0 })}
-        </p>
+        {showBalanceRewards ? (
+          <p className="mt-3 text-sm text-dark-500">
+            {t('referral.shareHint', { percent: info?.commission_percent || 0 })}
+          </p>
+        ) : showTrafficRewards ? (
+          <p className="mt-3 text-sm text-dark-500">
+            {t(
+              'referral.shareHintTraffic',
+              'Поделитесь ссылкой: награда начисляется после первого подключения приглашённого пользователя к VPN.',
+            )}
+          </p>
+        ) : null}
       </div>
 
       {/* Program Terms */}
@@ -423,11 +542,30 @@ export default function Referral() {
                     {new Date(ref.created_at).toLocaleDateString(i18n.language)}
                   </div>
                 </div>
-                {ref.has_paid ? (
-                  <span className="badge-success">{t('referral.status.paid')}</span>
-                ) : (
-                  <span className="badge-neutral">{t('referral.status.pending')}</span>
-                )}
+                <div className="flex flex-col items-end gap-1">
+                  {ref.has_paid ? (
+                    <span className="badge-success">{t('referral.status.paid')}</span>
+                  ) : ref.traffic_qualified ? (
+                    <span className="badge-info">
+                      {t('referral.status.connected', 'Подключился')}
+                    </span>
+                  ) : (
+                    <span className="badge-neutral">{t('referral.status.pending')}</span>
+                  )}
+                  {showBalanceRewards && ref.total_earned_rubles > 0 && (
+                    <span className="text-xs font-medium text-success-400">
+                      {formatPositive(ref.total_earned_rubles)}
+                    </span>
+                  )}
+                  {showTrafficRewards && ref.traffic_reward_days_earned > 0 && (
+                    <span className="text-xs font-medium text-accent-400">
+                      {t('referral.freeDaysShort', {
+                        count: ref.traffic_reward_days_earned,
+                        defaultValue: `+${ref.traffic_reward_days_earned} дн.`,
+                      })}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>

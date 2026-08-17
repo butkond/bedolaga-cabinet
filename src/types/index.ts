@@ -454,6 +454,14 @@ export interface ReferralInfo {
   total_earnings_kopeks: number;
   total_earnings_rubles: number;
   commission_percent: number;
+  referral_reward_mode: 'balance_commission' | 'traffic_reward' | string;
+  available_reward_modes: string[];
+  reward_mode_selectable: boolean;
+  traffic_qualified_referrals: number;
+  traffic_rewarded_referrals: number;
+  traffic_unrewarded_referrals: number;
+  traffic_reward_days_earned: number;
+  traffic_reward_grants_count: number;
   available_balance_kopeks: number;
   available_balance_rubles: number;
   withdrawn_kopeks: number;
@@ -461,6 +469,9 @@ export interface ReferralInfo {
 
 export interface ReferralTerms {
   is_enabled: boolean;
+  available_reward_modes: string[];
+  default_reward_mode: 'balance_commission' | 'traffic_reward' | string;
+  reward_mode_selectable: boolean;
   commission_percent: number;
   minimum_topup_kopeks: number;
   minimum_topup_rubles: number;
@@ -470,6 +481,10 @@ export interface ReferralTerms {
   inviter_bonus_rubles: number;
   max_commission_payments: number;
   partner_section_visible?: boolean;
+  traffic_rewards_enabled?: boolean;
+  traffic_reward_required_referrals?: number;
+  traffic_reward_days?: number;
+  traffic_reward_qualification_window_days?: number;
 }
 
 // Ticket types

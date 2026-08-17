@@ -184,6 +184,41 @@ export default function AdminPartnerSettings() {
               </div>
             </label>
           </div>
+
+          {settings && (
+            <div className="mt-5 rounded-xl border border-dark-700/60 bg-dark-800/40 p-4">
+              <div className="mb-2 font-medium text-dark-100">
+                {t('admin.partners.settingsFields.rewardModes', 'Доступные системы')}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {settings.available_reward_modes.map((mode) => (
+                  <span
+                    key={mode}
+                    className="rounded-lg bg-dark-700 px-2.5 py-1 text-xs text-dark-300"
+                  >
+                    {mode === 'traffic_reward'
+                      ? t('referral.rewardMode.traffic', 'Бесплатные дни')
+                      : t('referral.rewardMode.balance', 'Бонусы за пополнения')}
+                  </span>
+                ))}
+              </div>
+              {settings.available_reward_modes.includes('traffic_reward') && (
+                <p className="mt-2 text-xs text-dark-500">
+                  {t('admin.partners.settingsFields.trafficRewardReadOnly', {
+                    count: settings.traffic_reward_required_referrals,
+                    days: settings.traffic_reward_days,
+                    defaultValue: `Traffic reward: ${settings.traffic_reward_required_referrals} реф. → ${settings.traffic_reward_days} дн. Настраивается через .env.`,
+                  })}
+                </p>
+              )}
+              <p className="mt-2 text-xs text-dark-500">
+                {t(
+                  'admin.partners.settingsFields.rewardModesReadOnly',
+                  'Список доступных систем фиксируется через .env.',
+                )}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Withdrawal Settings Section */}

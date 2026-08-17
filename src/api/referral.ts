@@ -8,6 +8,12 @@ interface ReferralItem {
   created_at: string;
   has_subscription: boolean;
   has_paid: boolean;
+  total_earned_kopeks: number;
+  total_earned_rubles: number;
+  reward_mode_at_registration: string | null;
+  traffic_qualified: boolean;
+  traffic_qualified_at: string | null;
+  traffic_reward_days_earned: number;
 }
 
 interface ReferralEarning {
@@ -61,6 +67,13 @@ export const referralApi = {
   // Get referral terms
   getReferralTerms: async (): Promise<ReferralTerms> => {
     const response = await apiClient.get<ReferralTerms>('/cabinet/referral/terms');
+    return response.data;
+  },
+
+  updateRewardMode: async (mode: string): Promise<ReferralInfo> => {
+    const response = await apiClient.patch<ReferralInfo>('/cabinet/referral/reward-mode', {
+      mode,
+    });
     return response.data;
   },
 };

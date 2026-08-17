@@ -752,18 +752,31 @@
     "shareButton": "Share",
     "shareMessage": "Join me on {{botName}} and earn up to {{percent}}% cashback!",
     "shareHint": "Share this link with friends. When they sign up and make a purchase, you'll earn {{percent}}% commission!",
+    "shareHintTraffic": "Share your link: the reward is granted after an invited user connects to the VPN for the first time.",
+    "freeDaysShort": "+{{count}} d.",
+    "rewardMode": {
+      "title": "Reward system",
+      "balance": "Top-up rewards",
+      "balanceDesc": "Commission and bonuses from referral top-ups",
+      "traffic": "Free days",
+      "trafficDesc": "Reward for referrals who connect to the VPN for the first time"
+    },
     "stats": {
       "totalReferrals": "Total Referrals",
       "activeReferrals": "Active",
       "totalEarnings": "Total Earnings",
-      "commissionRate": "Commission Rate"
+      "commissionRate": "Commission Rate",
+      "freeDaysEarned": "Free days",
+      "qualifiedReferrals": "{{count}} connected"
     },
     "terms": {
       "title": "Program Terms",
       "commission": "Commission",
       "minTopup": "Min. Top-up",
       "newUserBonus": "New User Bonus",
-      "inviterBonus": "Inviter Bonus"
+      "inviterBonus": "Inviter Bonus",
+      "trafficReward": "For connections",
+      "trafficRewardValue": "{{count}} → +{{days}} d."
     },
     "yourReferrals": "Your Referrals",
     "noReferrals": "No referrals yet. Share your link to invite friends!",
@@ -774,7 +787,8 @@
     "hasPaid": "Has Paid",
     "status": {
       "pending": "Pending",
-      "paid": "Paid"
+      "paid": "Paid",
+      "connected": "Connected"
     },
     "earningsHistory": "Earnings History",
     "reason": "Reason",
@@ -2566,6 +2580,7 @@
       "pendingApplications": "Pending applications",
       "totalReferrals": "Total referrals",
       "totalEarnings": "Total earnings",
+      "totalTrafficRewardDays": "Free days",
       "tabs": {
         "partners": "Partners",
         "applications": "Applications"
@@ -2574,6 +2589,7 @@
       "noApplications": "No pending applications",
       "commission": "{{percent}}% commission",
       "referrals": "{{count}} referrals",
+      "trafficRewardDays": "🎁 {{count}} d.",
       "actions": {
         "approve": "Approve",
         "reject": "Reject",
@@ -2619,7 +2635,10 @@
         "cooldownDaysDesc": "How many days must pass between withdrawal requests",
         "requisitesText": "Requisites field prompt",
         "requisitesTextDesc": "Custom text shown to users to describe what payment details to provide",
-        "requisitesTextPlaceholder": "E.g.: Provide your bank card number or USDT TRC-20 address"
+        "requisitesTextPlaceholder": "E.g.: Provide your bank card number or USDT TRC-20 address",
+        "rewardModes": "Available systems",
+        "rewardModesReadOnly": "The list of available systems is fixed via .env.",
+        "trafficRewardReadOnly": "Traffic reward: {{count}} referrals → {{days}} days. Configured via .env."
       }
     },
     "partnerDetail": {
@@ -2643,6 +2662,13 @@
         "today": "Today",
         "week": "This week",
         "month": "This month"
+      },
+      "trafficRewards": {
+        "title": "Connection rewards",
+        "qualified": "Qualified",
+        "rewarded": "Rewarded",
+        "pending": "Waiting for threshold",
+        "days": "Days granted"
       },
       "commission": {
         "title": "Commission",
