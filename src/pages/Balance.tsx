@@ -338,8 +338,7 @@ export default function Balance() {
                       </div>
                     )}
                     <div className="mt-3 text-xs text-dark-600">
-                      {formatAmount(method.min_amount_kopeks / 100, 0)} –{' '}
-                      {formatAmount(method.max_amount_kopeks / 100, 0)} {currencySymbol}
+                      От {formatAmount(method.min_amount_kopeks / 100, 0)} {currencySymbol}
                     </div>
                   </Card>
                 );
