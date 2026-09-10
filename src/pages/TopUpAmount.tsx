@@ -289,7 +289,7 @@ export default function TopUpAmount() {
     }
   };
 
-  const quickAmounts = [100, 300, 500, 1000].filter((a) => a >= minRubles && a <= maxRubles);
+  const quickAmounts = [249, 599, 999, 1699].filter((a) => a >= minRubles && a <= maxRubles);
   const currencyDecimals = targetCurrency === 'IRR' || targetCurrency === 'RUB' ? 0 : 2;
   const getQuickValue = (rub: number) =>
     targetCurrency === 'IRR'
@@ -327,11 +327,10 @@ export default function TopUpAmount() {
       {/* Header icon and method */}
       <motion.div variants={staggerItem} className="flex items-center gap-4 pb-1">
         <div
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${
-            isStarsMethod
+          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isStarsMethod
               ? 'bg-gradient-to-br from-yellow-500/20 to-orange-500/20 text-yellow-400'
               : 'bg-gradient-to-br from-accent-500/20 to-accent-600/20 text-accent-400'
-          }`}
+            }`}
         >
           <div className="flex h-7 w-7 items-center justify-center">{getMethodIcon(method.id)}</div>
         </div>
@@ -353,11 +352,10 @@ export default function TopUpAmount() {
                 key={opt.id}
                 type="button"
                 onClick={() => setSelectedOption(opt.id)}
-                className={`relative rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
-                  selectedOption === opt.id
+                className={`relative rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${selectedOption === opt.id
                     ? 'bg-accent-500/15 text-accent-400 ring-2 ring-accent-500/40'
                     : 'border border-dark-700/50 bg-dark-800/70 text-dark-300 hover:bg-dark-700/70'
-                }`}
+                  }`}
               >
                 {opt.name}
                 {selectedOption === opt.id && (
@@ -376,11 +374,10 @@ export default function TopUpAmount() {
         <label className="text-sm font-medium text-dark-400">{t('balance.enterAmount')}</label>
         <div className="flex gap-2">
           <div
-            className={`relative flex-1 rounded-2xl transition-all duration-200 ${
-              isInputFocused
+            className={`relative flex-1 rounded-2xl transition-all duration-200 ${isInputFocused
                 ? 'bg-dark-800 ring-2 ring-accent-500/50'
                 : 'border border-dark-700/50 bg-dark-800/70'
-            }`}
+              }`}
           >
             <input
               ref={inputRef}
@@ -409,13 +406,12 @@ export default function TopUpAmount() {
             type="button"
             onClick={handleSubmit}
             disabled={isPending || !amount || parseFloat(amount) <= 0}
-            className={`flex h-14 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 text-base font-bold transition-colors duration-200 ${
-              isPending || !amount || parseFloat(amount) <= 0
+            className={`flex h-14 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 text-base font-bold transition-colors duration-200 ${isPending || !amount || parseFloat(amount) <= 0
                 ? 'cursor-not-allowed bg-dark-700 text-dark-500'
                 : isStarsMethod
                   ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/25 hover:from-yellow-400 hover:to-orange-400 active:from-yellow-600 active:to-orange-600'
                   : 'bg-gradient-to-r from-accent-500 to-accent-600 text-white shadow-lg shadow-accent-500/25 hover:from-accent-400 hover:to-accent-500 active:from-accent-600 active:to-accent-700'
-            }`}
+              }`}
           >
             {isPending ? (
               <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -446,9 +442,8 @@ export default function TopUpAmount() {
                 }}
                 hover
                 glow={isSelected}
-                className={`flex flex-col items-center justify-center px-2 py-3 ${
-                  isSelected ? 'border-accent-500/50 bg-accent-500/10' : ''
-                }`}
+                className={`flex flex-col items-center justify-center px-2 py-3 ${isSelected ? 'border-accent-500/50 bg-accent-500/10' : ''
+                  }`}
               >
                 <span
                   className={`text-base font-bold ${isSelected ? 'text-accent-400' : 'text-dark-200'}`}
@@ -518,11 +513,10 @@ export default function TopUpAmount() {
             <button
               type="button"
               onClick={handleCopyUrl}
-              className={`shrink-0 rounded-lg p-2.5 transition-colors ${
-                copied
+              className={`shrink-0 rounded-lg p-2.5 transition-colors ${copied
                   ? 'bg-success-500/20 text-success-400'
                   : 'bg-dark-800/70 text-dark-400 hover:bg-dark-700 hover:text-dark-200'
-              }`}
+                }`}
               title={t('common.copy')}
             >
               {copied ? <CheckIcon /> : <CopyIcon />}
