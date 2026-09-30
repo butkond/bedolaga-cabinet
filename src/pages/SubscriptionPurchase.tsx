@@ -82,6 +82,7 @@ export default function SubscriptionPurchase() {
     staleTime: 60_000,
   });
   const isMultiTariff = multiSubData?.multi_tariff_enabled ?? false;
+  const isTariffSwitchFlow = !!subscriptionId && !!subscription && !subscription.is_trial;
 
   // Helper to apply promo discount
   const applyPromoDiscount = (
@@ -720,7 +721,7 @@ export default function SubscriptionPurchase() {
 
               {/* Tariff Grid */}
               {isMultiTariff &&
-                !subscriptionId &&
+                !isTariffSwitchFlow &&
                 purchaseOptions &&
                 'all_tariffs_purchased' in purchaseOptions &&
                 purchaseOptions.all_tariffs_purchased && (
@@ -751,7 +752,7 @@ export default function SubscriptionPurchase() {
                   .filter((tariff) => {
                     // In multi-tariff "new tariff" flow: hide already purchased tariffs.
                     // In switch flow we must keep them visible so the selected subscription can move.
-                    if (isMultiTariff && !subscriptionId && tariff.is_purchased) return false;
+                    if (isMultiTariff && !isTariffSwitchFlow && tariff.is_purchased) return false;
                     if (subscription?.is_trial && tariff.name.toLowerCase().includes('trial')) {
                       return false;
                     }
