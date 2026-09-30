@@ -771,7 +771,7 @@ export default function SubscriptionPurchase() {
                       'subscription_is_expired' in purchaseOptions &&
                       purchaseOptions.subscription_is_expired === true;
                     const canSwitch =
-                      !isMultiTariff &&
+                      (!isMultiTariff || !!subscriptionId) &&
                       subscription &&
                       subscription.tariff_id &&
                       !isCurrentTariff &&
