@@ -1286,6 +1286,38 @@ export default function Subscription() {
       {/* Purchase / Renewal CTA (HIDDEN by customization) */}
       {/* <PurchaseCTAButton subscription={subscription} isMultiTariff={isMultiTariff} /> */}
 
+      {subscription &&
+        isTariffsMode &&
+        subscription.tariff_id &&
+        subscription.is_active &&
+        !subscription.is_trial && (
+          <button
+            onClick={() => navigate(`/subscription/purchase?subscriptionId=${subscription.id}`)}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border p-3.5 text-sm font-medium transition-colors"
+            style={{
+              background: 'rgba(var(--color-accent-400), 0.1)',
+              color: 'rgb(var(--color-accent-400))',
+              borderColor: 'rgba(var(--color-accent-400), 0.2)',
+            }}
+          >
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h18m-4.5-12L21 9m0 0-4.5 4.5M21 9H3"
+              />
+            </svg>
+            {t('subscription.purchaseSubscription', 'Оформить подписку')}
+          </button>
+        )}
+
       {/* Delete expired subscription */}
       {isMultiTariff && subscription && !subscription.is_active && !subscription.is_trial && (
         <div className="space-y-3">

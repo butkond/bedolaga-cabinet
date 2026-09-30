@@ -720,6 +720,7 @@ export default function SubscriptionPurchase() {
 
               {/* Tariff Grid */}
               {isMultiTariff &&
+                !subscriptionId &&
                 purchaseOptions &&
                 'all_tariffs_purchased' in purchaseOptions &&
                 purchaseOptions.all_tariffs_purchased && (
@@ -748,8 +749,9 @@ export default function SubscriptionPurchase() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {[...tariffs]
                   .filter((tariff) => {
-                    // In multi-tariff mode: hide already purchased tariffs
-                    if (isMultiTariff && tariff.is_purchased) return false;
+                    // In multi-tariff "new tariff" flow: hide already purchased tariffs.
+                    // In switch flow we must keep them visible so the selected subscription can move.
+                    if (isMultiTariff && !subscriptionId && tariff.is_purchased) return false;
                     if (subscription?.is_trial && tariff.name.toLowerCase().includes('trial')) {
                       return false;
                     }
