@@ -311,7 +311,8 @@ export default function Dashboard() {
             to="/subscription/purchase"
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent-500/15 p-3.5 text-sm font-medium text-accent-400 transition-all hover:bg-accent-500/25"
           >
-            <span className="text-base">+</span> {t('subscriptions.buyAnother', 'Купить ещё тариф')}
+            <span className="text-base">+</span>
+            {t('subscription.purchaseSubscription', 'Оформить подписку')}
           </Link>
         </div>
       )}
@@ -350,6 +351,16 @@ export default function Dashboard() {
             />
           ) : null}
         </>
+      )}
+
+      {!isMultiTariff && hasNoSubscription && (
+        <Link
+          to="/subscription/purchase"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent-500/15 p-3.5 text-sm font-medium text-accent-400 transition-all hover:bg-accent-500/25"
+        >
+          <span className="text-base">+</span>
+          {t('subscription.purchaseSubscription', 'Оформить подписку')}
+        </Link>
       )}
 
       {/* Trial Activation */}

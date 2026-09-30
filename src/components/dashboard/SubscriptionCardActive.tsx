@@ -496,6 +496,30 @@ export default function SubscriptionCardActive({
         </div>
       </div>
 
+      <Link
+        to={`/subscription/purchase?subscriptionId=${subscription.id}`}
+        className="mb-5 flex w-full items-center justify-center gap-2 rounded-[14px] py-3.5 text-[15px] font-semibold tracking-tight text-white transition-all duration-300"
+        style={{
+          background: `linear-gradient(135deg, rgb(var(--color-accent-500)), rgb(var(--color-accent-400)))`,
+          boxShadow: `0 4px 20px rgba(${zone.mainVarRaw}, 0.2)`,
+        }}
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        {t('subscription.purchaseSubscription', 'Оформить подписку')}
+      </Link>
+
       {/* ─── Traffic Refresh ─── */}
       <div className="mb-5 flex items-center justify-between px-0.5">
         <button
